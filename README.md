@@ -2,12 +2,11 @@
 
 ## Introduction
 
-This is a drupal 7 module that forwards watchdog entries to [papertrail](papertrailapp.com) via UDP. This could be used as a replacement 
-for the existing watchdog database logging module and without access to syslog configuration.
+This is a drupal 7 module that forwards watchdog entries to [papertrail](papertrailapp.com) via UDP. This could be used as a replacement for the existing watchdog database logging module and could be used without having access to syslog configuration. If you have access to the syslog configuration of your drupal server, it would be better to let all/some syslog entries be forwarded to papertrail directly as described in [this knowledgebase article](http://help.papertrailapp.com/kb/configuration/configuring-remote-syslog-from-unixlinux-and-bsdos-x/) 
 
 ## Requirements
 
-This module has no requirements
+This module has no requirements.
 
 ## Installation
 
