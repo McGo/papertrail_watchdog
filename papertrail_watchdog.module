@@ -44,7 +44,7 @@ function _send_papertrail_entry($log_entry) {
   $line .= " \033[0;32m" . $log_entry['uid'] . "\033[0m";
 
   // Add the message
-  $line .= t($log_entry['message'], $log_entry['variables']);
+  $line .= " ". t($log_entry['message'], $log_entry['variables']);
 
   $sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
   $syslog_message = "<22>" . date('M d H:i:s ') . ' ' . $identifier . ' ' . $line;
