@@ -1,0 +1,5 @@
+name = Papertrail watchdog
+description = Send all watchdog entries to papertrail
+core = 7.x
+version = 7.x-1.0-dev
+project = papertrail_watchdog

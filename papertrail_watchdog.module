@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * @file
+ *
+ */
+
+/**
+ * Implements hook_watchdog().
+ */
+function papertrail_watchdog_watchdog(array $log_entry) {
+  if (variable_get('papertrail_watchdog_enabled', FALSE)) {
+    _send_papertrail_entry($log_entry);
+  }
+}
+
+/**
+ * Send the log entry to papertrail based on the current settings.
+ *
+ * @param $log_entry
+ * @internal param $line
+ */
+function _send_papertrail_entry($log_entry) {
+  // Get credentials from settings.php
+  $host = variable_get('papertrail_watchdog_host', FALSE);
+  $port = variable_get('papertrail_watchdog_host', FALSE);
+  $identifier = variable_get('papertrail_watchdog_identifiert', 'Drupal');
+
+  // Defined severities
+  $severities = _papertrail_watchdog_severities();
+
+  // Start the logline with the severity
+  if (isset($severities[$log_entry['severity']]['color'])) {
+    $line = "\033[" . $severities[$log_entry['severity']]['color'] . "m" . "\033[47m" . $severities[$log_entry['severity']]['msg'] . "\033[0m" . "\033[0m";
+  }
+  else {
+    $line = "\033[47m" . $severities[$log_entry['severity']]['msg'] . "\033[0m";
+  }
+
+  // Add the type.
+  $line .= " \033[0;31m" . $log_entry['type'] . "\033[0m";
+
+  // Add the user id
+  $line .= " \033[0;32m" . $log_entry['uid'] . "\033[0m";
+
+  // Add the message
+  $line .= t($log_entry['message'], $log_entry['variables']);
+
+  $sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+  $syslog_message = "<22>" . date('M d H:i:s ') . ' ' . $identifier . ' ' . $line;
+  socket_sendto($sock, $syslog_message, strlen($syslog_message), 0, $host, $port);
+  socket_close($sock);
+}
+
+/**
+ * Define severity according to hook_watchdog().
+ *
+ * @return array
+ */
+function _papertrail_watchdog_severities() {
+  return array(
+    0 => array(
+      'msg' => 'EMERGENCY',
+      'color' => '0;31',
+    ),
+    1 => array(
+      'msg' => 'ALERT',
+      'color' => '0;31',
+    ),
+    2 => array(
+      'msg' => 'CRITICAL',
+      'color' => '1;31',
+    ),
+    3 => array(
+      'msg' => 'ERROR',
+      'color' => '1;31',
+    ),
+    4 => array(
+      'msg' => 'WARNING',
+      'color' => '1;33',
+    ),
+    5 => array(
+      'msg' => 'NOTICE',
+      'color' => '1;33',
+    ),
+    6 => array(
+      'msg' => 'INFO',
+    ),
+    7 => array(
+      'msg' => 'DEBUG',
+    ),
+  );
+}
