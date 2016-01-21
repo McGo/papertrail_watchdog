@@ -31,10 +31,10 @@ function _send_papertrail_entry($log_entry) {
 
   // Start the logline with the severity
   if (isset($severities[$log_entry['severity']]['color'])) {
-    $line = "\033[" . $severities[$log_entry['severity']]['color'] . "m" . "\033[47m" . $severities[$log_entry['severity']]['msg'] . "\033[0m" . "\033[0m";
+    $line = "\033[" . $severities[$log_entry['severity']]['color'] . "m" . "\033[47m" . "SEVERITY=".$severities[$log_entry['severity']]['msg'] . "\033[0m" . "\033[0m";
   }
   else {
-    $line = "\033[47m" . $severities[$log_entry['severity']]['msg'] . "\033[0m";
+    $line = "\033[47m" . "SEVERITY=".$severities[$log_entry['severity']]['msg'] . "\033[0m";
   }
 
   // Add the type.
