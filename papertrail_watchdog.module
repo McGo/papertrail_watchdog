@@ -23,8 +23,8 @@ function papertrail_watchdog_watchdog(array $log_entry) {
 function _send_papertrail_entry($log_entry) {
   // Get credentials from settings.php
   $host = variable_get('papertrail_watchdog_host', FALSE);
-  $port = variable_get('papertrail_watchdog_host', FALSE);
-  $identifier = variable_get('papertrail_watchdog_identifiert', 'Drupal');
+  $port = variable_get('papertrail_watchdog_port', FALSE);
+  $identifier = variable_get('papertrail_watchdog_identifier', 'Drupal');
 
   // Defined severities
   $severities = _papertrail_watchdog_severities();
